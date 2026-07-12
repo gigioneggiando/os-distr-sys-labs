@@ -1,0 +1,24 @@
+services:
+  kafka:
+    image: docker.redpanda.com/redpandadata/redpanda:latest
+    ports:
+      - "9092:9092"
+    environment:
+      - REDPANDA_AUTO_CREATE_TOPICS=true
+    command:
+      - redpanda
+      - start
+      - --overprovisioned
+      - --smp
+      - "1"
+      - --memory
+      - 512M
+      - --reserve-memory
+      - 0M
+      - --node-id
+      - "0"
+      - --check=false
+      - --kafka-addr
+      - PLAINTEXT://0.0.0.0:9092
+      - --advertise-kafka-addr
+      - PLAINTEXT://localhost:9092

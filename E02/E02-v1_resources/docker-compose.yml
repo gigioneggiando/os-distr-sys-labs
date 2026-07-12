@@ -1,0 +1,15 @@
+version: "3"
+
+name: L2E5
+
+services:
+
+  db-container:
+    build: ./L2E4
+
+  web:
+    build: ./L2E2
+    depends_on:
+      - db-container
+    ports:
+      - "7000:80"

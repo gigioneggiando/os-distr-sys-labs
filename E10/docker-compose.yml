@@ -1,0 +1,48 @@
+services:
+  proxy:
+    image: nginx:1.27-alpine
+    container_name: lab10_proxy
+    depends_on:
+      - backend
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/html:/usr/share/nginx/html:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+    networks:
+      - appnet
+
+  backend:
+    build: ./backend_mariadb
+    container_name: lab10_backend
+    environment:
+      DB_HOST: db
+      DB_USER: appuser
+      DB_PASSWORD: apppass
+      DB_NAME: people_db
+    depends_on:
+      - db
+    networks:
+      - appnet
+
+  db:
+    image: mariadb:11.4
+    container_name: lab10_db
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: rootpass
+      MARIADB_DATABASE: people_db
+      MARIADB_USER: appuser
+      MARIADB_PASSWORD: apppass
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - appnet
+
+networks:
+  appnet:
+
+volumes:
+  mariadb_data:

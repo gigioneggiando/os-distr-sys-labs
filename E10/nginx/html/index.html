@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lab 10 Form</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="card">
+    <h1>Member Registration</h1>
+    <form id="personForm">
+      <label>Username <input name="username" required /></label>
+      <label>Email <input name="email" type="email" required /></label>
+      <label>Phone <input name="phone" required /></label>
+      <label>Profile Picture Path <input name="profile_picture_path" /></label>
+      <button type="submit">Save</button>
+    </form>
+    <button id="loadBtn">Load Members</button>
+    <pre id="output"></pre>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>

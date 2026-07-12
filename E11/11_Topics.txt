@@ -1,0 +1,20 @@
+1) Symmetric vs Asymmetric Encryption
+Answer:
+Symmetric encryption uses one key for both encryption and decryption.
+Asymmetric encryption uses two keys: public key (encrypt) and private key (decrypt).
+Symmetric is faster; asymmetric is better for secure key exchange and identity verification.
+
+
+2) What is SSL?
+Answer:
+SSL (now mostly replaced by TLS) is a security protocol for encrypted communication on networks.
+It protects data between client and server from reading or tampering by attackers.
+In daily use, HTTPS websites rely on TLS/SSL concepts.
+
+
+3) Explainable SSL Handshake
+Answer:
+Handshake starts when client and server agree on protocol version and cipher suite.
+Server sends certificate; client verifies it to confirm server identity.
+They generate shared session keys, then secure encrypted communication begins.
+

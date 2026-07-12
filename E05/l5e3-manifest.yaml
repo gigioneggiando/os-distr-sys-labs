@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sql-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sql-pod
+  template:
+    metadata:
+      labels:
+        app: sql-pod
+    spec:
+      containers:
+        - name: sql
+          image: k8s-db:latest
+          imagePullPolicy: Never
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-container
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: sql-pod
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-pod
+  template:
+    metadata:
+      labels:
+        app: web-pod
+    spec:
+      containers:
+        - name: web
+          image: k8s-web:latest
+          imagePullPolicy: Never
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      nodePort: 30080
+  selector:
+    app: web-pod

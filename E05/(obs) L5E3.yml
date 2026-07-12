@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+    sql:
+        image: l2e5-db_container:latest
+        command: --default-authentication-plugin=mysql_native_password
+    
+    web:
+        image: l2e5-web:latest
+        depends_on:
+            - sql
+
+        ports:
+            - '8080:80'

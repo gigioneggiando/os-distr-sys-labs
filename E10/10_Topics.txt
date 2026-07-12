@@ -1,0 +1,26 @@
+1) Client-Server Architecture
+Answer:
+Client is the user side (browser/app) and server is the machine that provides data or services.
+The client sends a request, and the server sends a response.
+Example: Your web browser asks a website server for a page, then the page is returned.
+
+
+2) X as a Service
+Answer:
+"X as a Service" means delivering a computing resource over the internet as a service.
+Examples: SaaS (software), PaaS (platform), IaaS (infrastructure).
+Benefit: pay-as-you-use, easy scaling, less hardware management for users.
+
+
+3) The 12-Factor Application
+Answer:
+12-Factor is a set of best practices for cloud-ready apps.
+It promotes clean codebase, config in environment variables, stateless processes, and easy deployment.
+Goal: make applications portable, scalable, and easier to maintain.
+
+
+4) Raft Consensus Algorithm
+Answer:
+Raft is a distributed algorithm that helps many servers agree on the same data/log.
+One server becomes leader, others are followers; leader handles log replication.
+If leader fails, a new leader is elected, keeping the system consistent.
