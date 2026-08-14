@@ -13,20 +13,17 @@ section).
 docker run -d -p 9092:9092 --name broker apache/kafka:latest
 ```
 
-**This lab's implementation.** `materials/docker-compose.yml` starts a
-**Redpanda** broker instead of the official Apache Kafka image. Redpanda
-implements the Kafka wire protocol, so it is a drop-in replacement for
-`kafka-python`/the Kafka CLI tools, while being much lighter to start than a
-full Kafka + ZooKeeper (or KRaft) stack. Start it with:
+**This lab's implementation.** `materials/docker-compose.yml` starts the
+**official `apache/kafka:latest` image** directly (container named `broker`,
+same as the PDF's plain `docker run` command), running in single-node KRaft
+mode with no extra configuration needed:
 ```bash
 docker compose -f materials/docker-compose.yml up -d
 ```
-Both approaches expose port `9092` and behave identically from the
-producer/consumer's point of view.
 
 **Verification.** Ran `docker compose -f materials/docker-compose.yml up -d`;
-the container logs show `Successfully started Redpanda!` and `Started Kafka
-API server listening at ... port: 9092`.
+the container logs show `Kafka version: 4.3.1`, `Kafka Server started`, and
+`Awaiting socket connections on 0.0.0.0:9092`.
 
 ## Task 2: Test your setup
 
@@ -40,18 +37,21 @@ API server listening at ... port: 9092`.
 4. `./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic
    test-topic --from-beginning` — should print back `hello` and `world`.
 
-**Answer.** These CLI paths (`/opt/kafka/bin/...`) are specific to the official
-`apache/kafka` image used in the PDF. With the Redpanda image used in
-`materials/docker-compose.yml`, the equivalent is Redpanda's own CLI, `rpk`,
-already on the container's `PATH`:
+**Answer.** Followed the PDF's commands exactly (they match this setup
+one-to-one since it's the same official image, container name `broker`).
+
+**Verification.** Ran all four commands against the running container:
 ```bash
-docker exec -it materials-kafka-1 rpk topic create test-topic
-docker exec -it materials-kafka-1 rpk topic produce test-topic   # type hello, Enter, world, Enter, Ctrl+D
-docker exec -it materials-kafka-1 rpk topic consume test-topic
+docker exec --workdir /opt/kafka/bin/ -it broker sh
+./kafka-topics.sh --bootstrap-server localhost:9092 --create --topic test-topic
+# -> Created topic test-topic.
+./kafka-console-producer.sh --bootstrap-server localhost:9092 --topic test-topic
+# typed: hello <Enter> world <Enter> Ctrl+C
+./kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test-topic --from-beginning
+# -> hello
+# -> world
 ```
-The observable result is the same either way: whatever lines you produce are
-read back by the consumer, demonstrating that Kafka (or a Kafka-protocol
-broker like Redpanda) persists messages in a topic rather than requiring the
+Confirms the broker persists messages in a topic rather than requiring the
 producer and consumer to be connected to each other directly.
 
 ## Task 3: Create a Kafka Producer
@@ -76,12 +76,12 @@ Run with `pip install -r materials/requirements.txt` then `python
 materials/producer.py` (the topic is auto-created by the broker; no manual
 `kafka-topics.sh --create` step is required with this setup).
 
-**Verification.** Ran `python producer.py` against the Redpanda broker from
-Task 1 and it sent and printed all 10 events successfully, e.g.:
+**Verification.** Ran `python producer.py` against the official `apache/kafka`
+broker from Task 1 and it sent and printed all 10 events successfully, e.g.:
 ```
-[1/10] Sent: angryfish822 - oceane.lacroix@example.com
+[1/10] Sent: yellowlion213 - john.myers@example.com
 ...
-[10/10] Sent: silversnake459 - remedios.garcia@example.com
+[10/10] Sent: yellowbird137 - mikolaj.dybwad@example.com
 Done.
 ```
 
@@ -112,9 +112,9 @@ above (with `auto_offset_reset="earliest"` it also picked up the events sent
 before it started); it printed all 10 events correctly, e.g.:
 ```
 Listening on 'users-raw-data' (Ctrl+C to exit)...
-Username: angryfish822, Email: oceane.lacroix@example.com
+Username: yellowlion213, Email: john.myers@example.com
 ...
-Username: silversnake459, Email: remedios.garcia@example.com
+Username: yellowbird137, Email: mikolaj.dybwad@example.com
 ```
 This confirms the producer → broker → consumer chain works end to end with
-the materials in this lab.
+the official `apache/kafka` image, exactly as the PDF asks for.

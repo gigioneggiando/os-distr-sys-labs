@@ -35,7 +35,7 @@ lines. See `solutions/answers.md` for the full run.
 
 ## About the question PDF
 `solutions/questions.pdf` (`E08_Streaming.pdf`) asks for the official
-`apache/kafka` image; `materials/docker-compose.yml` uses a Redpanda broker
-instead, which speaks the same Kafka protocol and works as a drop-in
-replacement for this lab's producer/consumer. See `solutions/answers.md` for
-the equivalent CLI commands under each setup.
+`apache/kafka` image, and `materials/docker-compose.yml` now starts exactly
+that image (`apache/kafka:latest`, container named `broker`), matching the
+PDF's `docker run` command. See `solutions/answers.md` for the verified CLI
+and Python commands.
