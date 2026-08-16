@@ -1,7 +1,7 @@
 # Exercise 11 Solution (Terraform + Docker)
 
 ## What gets provisioned
-- `postgres` container
+- `postgres` container (26)
 - `flask1` container (provided Flask app)
 - `flask2` container (same app, different `APP_NAME`)
 - `nginx_lb` container for load balancing on `http://localhost:3000`
